@@ -18,8 +18,8 @@ is connected.
 
 * [Telldus TellStick](http://www.telldus.se/products/tellstick)
 * TelldusCenter installed and configured
-* [Scala](http://www.scala-lang.org/)
-* [Simple Build Tool - sbt](http://code.google.com/p/simple-build-tool/)
+* [Scala](http://www.scala-lang.org/) >= 2.9.1
+* [Simple Build Tool - sbt](http://code.google.com/p/simple-build-tool/) >= 0.11.1
 
 ### How to get started
 
@@ -37,7 +37,7 @@ is connected.
 For the scheduler to be able to turn on and off devices it needs an access token. Once it has an access token it can be
 reused. Get an access token by starting the scheduler like this:
 
-    java -jar simple-scheduler_2.8.1-0.1.min.jar <public key> <private key>
+    java -jar simple-scheduler.jar <public key> <private key>
 
 Follow the prompts and the access token and all the command line arguments needed to start the scheduler will be
 printed.
@@ -48,7 +48,7 @@ Save the public key, private key, access token and access token secret.
 
 Now that you have an access token it's time to start the scheduler.
 
-    java -jar simple-scheduler_2.8.1-0.1.min.jar <public key> <private key> <access token> <access token secret>
+    java -jar simple-scheduler.jar <public key> <private key> <access token> <access token secret>
 
 ### That's it!
 
