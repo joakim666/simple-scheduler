@@ -1,0 +1,69 @@
+span.cron-input {
+    line-height: 1.75;
+}
+
+/* red delete button in listview for events */
+li.event .ui-icon-delete {
+/*  background: #a00;	
+  color: #fff;*/
+	background: #a00;
+/*	background: rgba(0, 0, 0, .4);*/
+	background-image: url(images/icons-18-white.png);
+	background-repeat: no-repeat;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	border-radius: 9px;
+	background-position: -72px 50%;
+}
+
+
+/*** jQuery Mobile swatches ***/
+/* F swatch */
+ 
+.ui-btn-up-f {
+  border: 1px solid #b11;
+  background: #a00;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 0 -1px 1px #000;
+  text-decoration: none;
+  background-image: -moz-linear-gradient(top, #e55, #a00);
+  background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #f66), color-stop(1, #a00));
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#f66', EndColorStr='#a00')";
+}
+.ui-btn-up-f a.ui-link-inherit {
+  color: #fff;
+}
+.ui-btn-hover-f {
+  border: 1px solid #a00;
+  background: #b11;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 -1px 1px #000;
+  text-decoration: none;
+  background-image: -moz-linear-gradient(top, #f66, #b11);
+  background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #f66), color-stop(1, #b11));
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#f66', EndColorStr='#b11')";
+}
+.ui-btn-hover-f a.ui-link-inherit {
+  color: #fff;
+}
+.ui-btn-down-f {
+  border: 1px solid #800;
+  background: #e55;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 -1px 1px #000;
+  background-image: -moz-linear-gradient(top, #800, #e55);
+  background-image: -webkit-gradient(linear,left top,left bottom, color-stop(0, #800), color-stop(1, #e55));
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#800', EndColorStr='#e55')";
+}
+.ui-btn-down-f a.ui-link-inherit {
+  color: #fff;
+}
+.ui-btn-up-f,
+.ui-btn-hover-f,
+.ui-btn-down-f {
+  font-family: Helvetica, Arial, sans-serif;
+}

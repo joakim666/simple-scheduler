@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sbt proguard
+sbt assembly

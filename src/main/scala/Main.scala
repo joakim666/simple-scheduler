@@ -1,10 +1,9 @@
 import net.morrdusk.action.{TurnOff, TurnOn}
 import net.morrdusk.request.AccessTokenRequester
-import net.scala0.schedulr.{JobSchedule, Scheduler}
 
 object Main {
 
-  def main(args: Array[String]) {
+  /*def main(args: Array[String]) {
     if (args.length == 2) {
       val accessToken = new AccessTokenRequester().requestAccessToken(args(0), args(1))
       println
@@ -33,5 +32,5 @@ object Main {
     Scheduler.add(new TurnOff(Devices.LIVING_ROOM_HIGH_LAMP, info), JobSchedule.cron("1 0 23 * * *")) // @23:00
     Scheduler.add(new TurnOff(Devices.LIVING_ROOM_SOFA_LAMP, info), JobSchedule.cron("2 0 23 * * *")) // @23:00
     Scheduler.add(new TurnOff(Devices.OUTDOOR_LIGHTS, info), JobSchedule.cron("3 0 23 * * *")) // @23:00
-  }
+  }*/
 }

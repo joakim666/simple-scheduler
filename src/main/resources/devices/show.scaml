@@ -1,0 +1,25 @@
+- import net.morrdusk.model.Event
+
+-@ val deviceId: String
+-@ val events: List[Event]
+
+%h1 Device info
+
+%ul
+    - events.foreach(event => {
+        %li(id="#{event.id}")
+            = event.action
+            = event.cron
+            %a(href="#")
+                delete
+    - })
+
+%div
+    %form(method="POST" action="/device/#{deviceId}")
+        %p
+            Action:
+            %input(type="text" name="action")
+        %p
+            Cron:
+            %input(type="text" name="cron")
+        %input(type="submit" value="Save")

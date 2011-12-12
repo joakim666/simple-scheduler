@@ -1,0 +1,10 @@
+- import net.morrdusk.model.Event
+
+-@ val event: Event
+
+- attributes("layout") = ""
+
+li(id="li_#{event.id.toString}" class="event" data-icon="delete")
+    a(href="#" class="delete")
+        = event.action
+        = event.cron

@@ -1,0 +1,47 @@
+- import net.morrdusk.model.json.Device
+- import net.morrdusk.model.Event
+- import scala.collection.mutable.HashMap
+
+-@ val devices: List[Device]
+-@ val deviceEvents: HashMap[Device, List[Event]]
+
+:javascript
+    $(document).ready(function() {
+        // remove event
+        $("#devices").on("click", "a.delete", function(event) {
+            event.preventDefault();
+            var target = $("#li_" + $(this).attr('id'));
+            $.post('/event/remove', { id: $(this).attr('id') }, function(data) {
+                target.remove();
+            });
+        });
+
+        // add event
+        $("#devices").on("click", "a.new", function(event) {
+            event.preventDefault();
+            var target = $("#add_" + $(this).attr('id'));
+            $.post('/event/new', { deviceId: $(this).attr('id') }, function(data) {
+                target.before(data);
+            });
+            $("#devices-list").listview('refresh');
+        });
+    });
+
+div(data-role="page")
+    div(data-role="header") Devices
+
+    div(id="devices" data-role="content")
+        ul(id="devices-list" data-role="listview")
+            - devices.foreach(device => {
+                li(id="device_#{device.id.toString}" data-role="list-divider") = device.name
+                - deviceEvents(device).foreach(event => {
+                    li(id="li_#{event.id.toString}" class="event" data-icon="delete")
+                        a(id="#{event.id.toString}" href="#" class="delete")
+                            = event.action
+                            = event.cron
+                - })
+                li(id="add_#{device.id.toString}" data-icon="plus")
+                    a(id="#{device.id.toString}" href="#" class="new") Add new event
+            - })
+
+    div(data-role="footer") Footer
