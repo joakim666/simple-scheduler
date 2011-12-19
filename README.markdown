@@ -11,6 +11,8 @@ is connected.
 Simple-Scheduler uses an embedded [jetty](http://jetty.codehaus.org/jetty/) server to present a [jQuery mobile](http://jquerymobile.com/)
 interface, that makes it simple to add, remove and view events from an iPad or iPhone.
 
+Scroll down for a screenshot.
+
 ### Disclaimer
 
 I am still learning Scala and my code is far from perfect. I don't mind suggestions on how to make it better.
@@ -53,5 +55,12 @@ Now that you have an access token it's time to start the scheduler.
 
 The web interface is available at [http://localhost:9000]
 
+
+### Screenshot
+
+![Screenshot of iPad using the schedular](https://raw.github.com/joakim666/simple-scheduler/master/screenshots/iPad_screenshot.jpg)
+
+
+### Feedback
 
 Comments and improvements are very welcome!
