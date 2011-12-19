@@ -1,0 +1,44 @@
+-@ val deviceId: String
+-@ val timestamp: String
+
+- attributes("layout") = ""
+
+
+li(id="li_#{timestamp}")
+    form(id="form_#{timestamp}" method="POST" onsubmit="return false;")
+        div(class="create-refresh")
+            select(name="action")
+                option(value="on") Turn On
+                option(value="off") Turn Off
+        span(id="cron_#{timestamp}" class="cron-input" data-role="none")
+
+        div(class="create-refresh")
+            input(type="hidden" name="id" value="#{deviceId}")
+            input(type="submit" value="Save")
+            input(type="submit" value="Cancel")
+
+:!javascript
+    $("#cron_#{timestamp}").cron();
+    $(".create-refresh").trigger("create"); // refresh jquery mobile elements
+
+    $("#form_#{timestamp} :submit:([value='Save'])").click(function() {
+        console.log("In submit");
+        $.post('/event/create', $("#form_#{timestamp}").serialize() + "&cron=" + $("#cron_#{timestamp}").cron("value"), function(data) {
+            console.log("post returned!");
+            $("#li_#{timestamp}").replaceWith(data);
+            $("#devices-list").listview('refresh');
+            console.log("listview refreshed");
+        });
+
+        console.log("returning false");
+        return false; // prevent normal form submit
+    });
+
+    $("#form_#{timestamp} :submit:not([value='Save'])").click(function() {
+        console.log("In non-save submit");
+        $("#li_#{timestamp}").remove();
+        console.log("2) returning false");
+        return false;
+    });
+
+

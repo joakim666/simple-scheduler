@@ -10,8 +10,6 @@ import org.fusesource.scalate.layout.DefaultLayoutStrategy
 class RoutingServlet(info: List[String], scheduler: JobScheduler) extends ScalatraServlet with UrlSupport with ScalateSupport {
   protected def contextPath = request.getContextPath
 
-  override def isDevelopmentMode = false
-
   before() {
     contentType = "text/html"
     templateEngine.layoutStrategy = new DefaultLayoutStrategy(templateEngine, "/layouts/default.jade")
@@ -19,18 +17,6 @@ class RoutingServlet(info: List[String], scheduler: JobScheduler) extends Scalat
 
   get("/") {
     new DeviceController(templateEngine, info).index()
-  }
-
-//  get("/devices") {
-//    new DeviceController(templateEngine, info).index()
-//  }
-
-  get("/device/:id") {
-    new DeviceController(templateEngine, info).show(params("id"))
-  }
-
-  post("/device/:id") {
-    new DeviceController(templateEngine, info).save(params)
   }
 
   post("/event/new") {

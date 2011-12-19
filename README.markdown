@@ -8,11 +8,12 @@ using the internet. **Simple-Scheduler** is a simple scheduler that uses the Tel
 at given times. This makes it possible for the scheduler to run on a different machine than the one where the TellStick
 is connected.
 
-### Example of configuration
+Simple-Scheduler uses an embedded [jetty](http://jetty.codehaus.org/jetty/) server to present a [jQuery mobile](http://jquerymobile.com/)
+interface, that makes it simple to add, remove and view events from an iPad or iPhone.
 
-    Scheduler.add(new TurnOn(Devices.OUTDOOR_LIGHTS, info), JobSchedule.cron("0 0 19 * * *")) // @19:00
-    Scheduler.add(new TurnOn(Devices.HOME_OFFICE, info), JobSchedule.cron("1 0 19 * * *")) // @19:00
-    Scheduler.add(new TurnOn(Devices.LIVING_ROOM_HIGH_LAMP, info), JobSchedule.cron("2 0 19 * * *")) // @19:00
+### Disclaimer
+
+I am still learning Scala and my code is far from perfect. I don't mind suggestions on how to make it better.
 
 ### Requirements
 
@@ -20,17 +21,15 @@ is connected.
 * TelldusCenter installed and configured
 * [Scala](http://www.scala-lang.org/) >= 2.9.1
 * [Simple Build Tool - sbt](http://code.google.com/p/simple-build-tool/) >= 0.11.1
+* [MongoDB](http://www.mongodb.org/) installed and running on the machine that will run the scheduler
 
 ### How to get started
 
-1. Active Tellus Live! in your TelldusCenter by following the instructions [here](http://live.telldus.com/help/activate).
-2. Go to [https://api.telldus.com/explore/devices/list](https://api.telldus.com/explore/devices/list) select JSON and
-  press 'Send'. Update the **Devices.scala** file with names and ids of your devices.
-3. Update the scheduler configuration in the **Main.scala** file.
-4. Go to [https://api.telldus.com/keys/generatePrivate](https://api.telldus.com/keys/generatePrivate) to generate
+1. Active Tellus Live! in your TelldusCenter application by following the instructions [here](http://live.telldus.com/help/activate).
+2. Go to [https://api.telldus.com/keys/generatePrivate](https://api.telldus.com/keys/generatePrivate) to generate
   a private key used to identify and authorized the scheduler. The key will be used on the command line when starting
   the scheduler.
-5. Go to the root of the project and do **sbt proguard**. This will compile and package the scheduler as one big jar file.
+3. Go to the root of the project and do **sbt assembly**. This will compile and package the scheduler as one big jar file.
 
 ### The first time
 
@@ -51,5 +50,8 @@ Now that you have an access token it's time to start the scheduler.
     java -jar simple-scheduler.jar <public key> <private key> <access token> <access token secret>
 
 ### That's it!
+
+The web interface is available at [http://localhost:9000]
+
 
 Comments and improvements are very welcome!

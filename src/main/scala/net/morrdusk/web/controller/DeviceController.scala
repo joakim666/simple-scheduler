@@ -22,25 +22,4 @@ class DeviceController(templateEngine: TemplateEngine, info: List[String]) exten
     render("devices/index.jade", Map("devices" -> devices, "deviceEvents" -> deviceEvents))
   }
 
-  def show(id: String) {
-    LOG.info("in show")
-    val events = EventDao.find(ref = MongoDBObject("deviceId" -> id.toLong)).toList
-    LOG.info("events: {}", events)
-    render("devices/show.jade", Map("deviceId" -> id,
-                                     "events" -> events))
-  }
-
-  // deprecated, should use EventController.create instead
-  def save(params: Map[String,String]) {
-    LOG.info("in save")
-    LOG.info("id: {}", params("id"))
-    LOG.info("action: {}", params("action"))
-    LOG.info("cron: {}", params("cron"))
-
-    val event = Event(deviceId = params("id").toLong, action = params("action"), cron = params("cron"))
-    EventDao.insert(event)
-
-    show(params("id"))
-  }
-
 }

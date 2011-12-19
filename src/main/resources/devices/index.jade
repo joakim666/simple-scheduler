@@ -1,5 +1,6 @@
 - import net.morrdusk.model.json.Device
 - import net.morrdusk.model.Event
+- import net.morrdusk.web.view.helpers.CronFormatter._
 - import scala.collection.mutable.HashMap
 
 -@ val devices: List[Device]
@@ -10,10 +11,16 @@
         // remove event
         $("#devices").on("click", "a.delete", function(event) {
             event.preventDefault();
-            var target = $("#li_" + $(this).attr('id'));
-            $.post('/event/remove', { id: $(this).attr('id') }, function(data) {
-                target.remove();
-            });
+            var icon = $("#li_" + $(this).attr('id') + " span.ui-icon");
+            if (icon.hasClass("ui-icon-minus")) {
+                icon.removeClass("ui-icon-minus").addClass("ui-icon-delete");
+            }
+            else {
+                var target = $("#li_" + $(this).attr('id'));
+                $.post('/event/remove', { id: $(this).attr('id') }, function(data) {
+                    target.remove();
+                });
+            }
         });
 
         // add event
@@ -22,8 +29,8 @@
             var target = $("#add_" + $(this).attr('id'));
             $.post('/event/new', { deviceId: $(this).attr('id') }, function(data) {
                 target.before(data);
+                $("#devices-list").listview('refresh');
             });
-            $("#devices-list").listview('refresh');
         });
     });
 
@@ -35,10 +42,10 @@ div(data-role="page")
             - devices.foreach(device => {
                 li(id="device_#{device.id.toString}" data-role="list-divider") = device.name
                 - deviceEvents(device).foreach(event => {
-                    li(id="li_#{event.id.toString}" class="event" data-icon="delete")
+                    li(id="li_#{event.id.toString}" class="event" data-icon="minus")
                         a(id="#{event.id.toString}" href="#" class="delete")
-                            = event.action
-                            = event.cron
+                            = "Turn " + event.action
+                            = englishDescription(event.cron)
                 - })
                 li(id="add_#{device.id.toString}" data-icon="plus")
                     a(id="#{device.id.toString}" href="#" class="new") Add new event

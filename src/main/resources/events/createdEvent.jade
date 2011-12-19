@@ -1,10 +1,11 @@
 - import net.morrdusk.model.Event
+- import net.morrdusk.web.view.helpers.CronFormatter._
 
 -@ val event: Event
 
 - attributes("layout") = ""
 
-li(id="li_#{event.id.toString}" class="event" data-icon="delete")
-    a(href="#" class="delete")
-        = event.action
-        = event.cron
+li(id="li_#{event.id.toString}" class="event" data-icon="minus")
+    a(id="#{event.id.toString}" href="#" class="delete")
+        = "Turn " + event.action
+        = englishDescription(event.cron)

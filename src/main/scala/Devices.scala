@@ -1,7 +1,0 @@
-
-object Devices {
-  val HOME_OFFICE = 7135
-  val LIVING_ROOM_HIGH_LAMP = 7133
-  val LIVING_ROOM_SOFA_LAMP = 7134
-  val OUTDOOR_LIGHTS = 11103
-}

@@ -24,7 +24,7 @@ trait TelldusLive {
     makeDeviceRequest(info, "list")
   }
 
-  def requestAccessToken(key: String, secret: String) = {
+  def zrequestAccessToken(key: String, secret: String) = {
     val consumer = Consumer(key, secret)
     val http = new Http
 
@@ -50,8 +50,6 @@ trait TelldusLive {
     val http = new Http
 
     val url = (:/("api.telldus.com") / "json").secure
-//    val params = Map[String, Any]("id" -> id, "method" -> method)
-//    val res = http(url / "devices" / command <<? params <@ (consumer, access_token) as_str)
     val res = http(url / "devices" / command <@ (consumer, access_token) as_str)
     LOG.info("res: {}", res)
     val deviceList = parse[DeviceList](res)

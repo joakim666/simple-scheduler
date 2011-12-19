@@ -2,6 +2,7 @@ package net.morrdusk
 
 import model.EventDao
 import org.mortbay.jetty.Server
+import request.AccessTokenRequester
 import scheduling.JobScheduler
 import web.RoutingServlet
 
@@ -25,11 +26,21 @@ object JettyLauncher {
   }
 
   def main(args: Array[String]) {
+    if (args.length == 2) {
+      val accessToken = new AccessTokenRequester().requestAccessToken(args(0), args(1))
+      println
+      println("Your access token is: " + accessToken.value + " " + accessToken.secret)
+      println
+      println("The command line parameters to use: " + args(0) + " " + args(1) + " " + accessToken.value + " " + accessToken.secret)
+      
+      System.exit(0)
+    }
+
+    
+    
     val info = List(args(0), args(1), args(2), args(3))
 
-    val environment = DEVELOPMENT
-
-    if (environment == DEVELOPMENT) {
+    if (System.getProperty("environment") == "development") {
       System.setProperty("org.scalatra.environment", "development")
 
       /**

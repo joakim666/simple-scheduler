@@ -25,17 +25,6 @@ object JobScheduler {
       override def run() { -scheduler }
     })
 
-/*    val s = cronSchedule("0 * * * * ?")
-    val job = newJob(classOf[TelldusJob]) withIdentity ("job1", "group1")
-    val trigger = newTrigger() withIdentity ("job1", "group1") withSchedule s
-
-    val detail: JobDetail = job.build()
-
-    detail.getJobDataMap.put(TelldusJob.ACTION, "up")
-    detail.getJobDataMap.put(TelldusJob.DEVICE_ID, "11111")
-
-    scheduler <-> (detail, trigger.build())*/
-
     new JobScheduler(scheduler, info)
   }
 }
@@ -44,7 +33,6 @@ class JobScheduler(scheduler: RichScheduler, info: List[String]) {
   val LOG = LoggerFactory.getLogger(getClass)
 
   def schedule(event: Event) {
-    LOG.info("cron1: {}", event.cron)
     val s = cronSchedule(event.cron)
     val job = newJob(classOf[TelldusJob]) withIdentity (event.id.toString, event.deviceId.toString)
     val trigger = newTrigger() withIdentity (event.id.toString, event.deviceId.toString) withSchedule s
