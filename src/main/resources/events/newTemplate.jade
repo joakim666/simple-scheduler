@@ -21,24 +21,21 @@ li(id="li_#{timestamp}")
     $("#cron_#{timestamp}").cron();
     $(".create-refresh").trigger("create"); // refresh jquery mobile elements
 
-    $("#form_#{timestamp} :submit:([value='Save'])").click(function() {
-        console.log("In submit");
-        $.post('/event/create', $("#form_#{timestamp}").serialize() + "&cron=" + $("#cron_#{timestamp}").cron("value"), function(data) {
-            console.log("post returned!");
-            $("#li_#{timestamp}").replaceWith(data);
-            $("#devices-list").listview('refresh');
-            console.log("listview refreshed");
-        });
-
-        console.log("returning false");
-        return false; // prevent normal form submit
-    });
-
-    $("#form_#{timestamp} :submit:not([value='Save'])").click(function() {
-        console.log("In non-save submit");
-        $("#li_#{timestamp}").remove();
-        console.log("2) returning false");
-        return false;
+    $("#form_#{timestamp} input[type='submit']").click(function(event) {
+        event.preventDefault();
+        if (event.currentTarget.value == "Save") {
+            console.log("In submit");
+            $.post('/event/create', $("#form_#{timestamp}").serialize() + "&cron=" + $("#cron_#{timestamp}").cron("value"), function(data) {
+                console.log("post returned!");
+                $("#li_#{timestamp}").replaceWith(data);
+                $("#devices-list").listview('refresh');
+                console.log("listview refreshed");
+            });
+        }
+        else {
+            console.log("In non-save submit");
+            $("#li_#{timestamp}").remove();
+        }
     });
 
 

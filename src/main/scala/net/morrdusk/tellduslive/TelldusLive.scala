@@ -24,7 +24,7 @@ trait TelldusLive {
     makeDeviceRequest(info, "list")
   }
 
-  def zrequestAccessToken(key: String, secret: String) = {
+  def requestAccessToken(key: String, secret: String) = {
     val consumer = Consumer(key, secret)
     val http = new Http
 
