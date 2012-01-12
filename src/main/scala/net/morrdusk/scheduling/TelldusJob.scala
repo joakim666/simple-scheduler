@@ -11,7 +11,7 @@ class TelldusJob extends Job with TelldusLive {
     val data = context.getJobDetail.getJobDataMap
     val action = data.getString(TelldusJob.ACTION)
     val deviceId = data.getString(TelldusJob.DEVICE_ID)
-    val info: List[String] = data.get(TelldusJob.TELLDUS_LIVE_INFO).asInstanceOf[List[String]]
+    val info: List[String] = data.get(TelldusJob.API_KEY).asInstanceOf[List[String]]
 
     LOG.info("in execute with action={} and deviceId={}", action, deviceId)
 
@@ -30,5 +30,6 @@ class TelldusJob extends Job with TelldusLive {
 object TelldusJob {
   val ACTION = "action"
   val DEVICE_ID = "deviceId"
-  val TELLDUS_LIVE_INFO = "telldusLiveInfo"
+  val API_KEY = "apiKey"
+  val ACCESS_TOKEN = "accessToken"
 }

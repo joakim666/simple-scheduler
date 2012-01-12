@@ -1,6 +1,7 @@
 - import net.morrdusk.model.json.Device
 - import net.morrdusk.model.Event
 - import net.morrdusk.web.view.helpers.CronFormatter._
+- import net.morrdusk.web.AuthUser
 - import scala.collection.mutable.HashMap
 
 -@ val devices: List[Device]
@@ -35,7 +36,9 @@
     });
 
 div(data-role="page")
-    div(data-role="header") Devices
+    div(data-role="header" data-position="inline")
+        h1 Devices
+        a(href="/logout" class="ui-btn-right" data-ajax="false") Logout
 
     div(id="devices" data-role="content")
         ul(id="devices-list" data-role="listview")
@@ -50,5 +53,3 @@ div(data-role="page")
                 li(id="add_#{device.id.toString}" data-icon="plus")
                     a(id="#{device.id.toString}" href="#" class="new") Add new event
             - })
-
-    div(data-role="footer") Footer

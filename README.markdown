@@ -33,23 +33,11 @@ I am still learning Scala and my code is far from perfect. I don't mind suggesti
   the scheduler.
 3. Go to the root of the project and do **sbt assembly**. This will compile and package the scheduler as one big jar file.
 
-### The first time
-
-For the scheduler to be able to turn on and off devices it needs an access token. Once it has an access token it can be
-reused. Get an access token by starting the scheduler like this:
-
-    java -jar simple-scheduler.jar <public key> <private key>
-
-Follow the prompts and the access token and all the command line arguments needed to start the scheduler will be
-printed.
-
-Save the public key, private key, access token and access token secret.
-
 ### Start the scheduler
 
-Now that you have an access token it's time to start the scheduler.
+Start the scheduler with the key and secret retrieved in step 2 above as the paramters
 
-    java -jar simple-scheduler.jar <public key> <private key> <access token> <access token secret>
+    java -jar simple-scheduler.jar <key> <secret>
 
 ### That's it!
 

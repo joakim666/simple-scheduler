@@ -7,6 +7,8 @@ import xml.{Elem, XML}
 import org.slf4j.LoggerFactory
 import com.codahale.jerkson.Json._
 import net.morrdusk.model.json.{DeviceList, Device}
+import net.morrdusk.ApiKey
+import net.morrdusk.model.AccessToken
 
 trait TelldusLive {
   val LOG = LoggerFactory.getLogger(getClass)
@@ -18,35 +20,40 @@ trait TelldusLive {
     makeRequest(info, id, 2)
   }
 
-  def listDevices(info: List[String]): List[Device] = {
-    LOG.info("listDevices: {}, info")
+  def listDevices(apiKey: ApiKey, accessToken: AccessToken): List[Device] = {
+    LOG.info("listDevices: {} {}", apiKey, accessToken)
 
-    makeDeviceRequest(info, "list")
+    makeDeviceRequest(apiKey, accessToken, "list")
   }
 
-  def requestAccessToken(key: String, secret: String) = {
-    val consumer = Consumer(key, secret)
+  def makeAuthorizeUrl(apiKey: ApiKey, callback: String) = {
+    val consumer = Consumer(apiKey.key, apiKey.secret)
     val http = new Http
 
     val url = (:/("api.telldus.com") / "oauth").secure
 
-    val requestToken = http(url / "requestToken" <@ (consumer) as_token)
+    val requestToken = http(url / "requestToken" <@ (consumer, callback) as_token)
 
     val params = Map[String, Any]("oauth_token" -> requestToken.value)
     val authorizeUrl = url / "authorize" <<? params <@ (consumer, requestToken)
-    println("Please open this url in a web browser: " + authorizeUrl.to_uri)
-    println("Press enter when you have authorized the token")
-    Console.readLine
-    
+
+    (requestToken, authorizeUrl.to_uri.toString)
+  }
+
+  def getAccessToken(apiKey: ApiKey, requestToken: Token) = {
+    val consumer = Consumer(apiKey.key, apiKey.secret)
+    val http = new Http
+
+    val url = (:/("api.telldus.com") / "oauth").secure
     http(url / "accessToken" <@ (consumer, requestToken) as_token)
   }
 
   private
 
-  def makeDeviceRequest(info: List[String], command: String): List[Device] = {
+  def makeDeviceRequest(apiKey: ApiKey, accessToken: AccessToken, command: String): List[Device] = {
     LOG.info("makeDeviceRequest")
-    val consumer = Consumer(info(0), info(1))
-    val access_token = Token(info(2), info(3))
+    val consumer = Consumer(apiKey.key, apiKey.secret)
+    val access_token = Token(accessToken.value, accessToken.secret)
     val http = new Http
 
     val url = (:/("api.telldus.com") / "json").secure

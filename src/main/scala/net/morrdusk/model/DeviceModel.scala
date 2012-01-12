@@ -2,13 +2,14 @@ package net.morrdusk.model
 
 import json.Device
 import net.morrdusk.tellduslive.TelldusLive
+import net.morrdusk.ApiKey
 
 class DeviceModel extends TelldusLive {
 }
 
 object DeviceModel {
-  def list(info: List[String]): List[Device] = {
+  def list(apiKey: ApiKey, accessToken: AccessToken): List[Device] = {
     val dev = new DeviceModel()
-    dev.listDevices(info)
+    dev.listDevices(apiKey, accessToken)
   }
 }

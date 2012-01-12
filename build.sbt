@@ -14,6 +14,8 @@ resolvers += "repo.novus snaps" at "http://repo.novus.com/snapshots/"
 
 resolvers += "repo.codahale.com" at "http://repo.codahale.com/"
 
+resolvers += "Guice Maven" at "http://guice-maven.googlecode.com/svn/trunk"
+
 // add compile dependencies
 libraryDependencies ++= Seq(
     "net.databinder" %% "dispatch-oauth" % "0.7.8",
@@ -26,7 +28,8 @@ libraryDependencies ++= Seq(
     "com.mongodb.casbah" % "casbah_2.9.0-1" % "2.1.5.0",
     "com.codahale" %% "jerkson" % "0.5.0",
     "org.quartz-scheduler" % "quartz" % "2.1.1",
-    "joda-time" % "joda-time" % "2.0"
+    "joda-time" % "joda-time" % "2.0",
+    "org.openid4java" % "openid4java-consumer" % "0.9.6"
 )
 
 // append -deprecation to the options passed to the Scala compiler

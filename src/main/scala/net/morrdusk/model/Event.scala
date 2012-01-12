@@ -7,7 +7,7 @@ import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.MongoConnection
 
-case class Event(@Key("_id") id: ObjectId = new ObjectId, deviceId: Long, action: String, cron: String)
+case class Event(@Key("_id") id: ObjectId = new ObjectId, userIdentifier: String, deviceId: Long, action: String, cron: String)
 
 object EventDao extends SalatDAO[Event, ObjectId] (
   collection = MongoConnection()("simple-scheduler")("events")

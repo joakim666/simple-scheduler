@@ -1,6 +1,6 @@
 package net.morrdusk
 
-import model.EventDao
+import model.{AccessTokenDao, EventDao}
 import org.mortbay.jetty.Server
 import request.AccessTokenRequester
 import scheduling.JobScheduler
@@ -10,6 +10,8 @@ import org.mortbay.jetty.servlet.{Context, ServletHolder}
 import org.mortbay.jetty.handler.ResourceHandler
 import org.slf4j.LoggerFactory
 import com.mongodb.casbah.commons.MongoDBObject
+
+class ApiKey(val key: String, val secret: String)
 
 object JettyLauncher {
   val LOG = LoggerFactory.getLogger(getClass)
@@ -21,24 +23,23 @@ object JettyLauncher {
     LOG.info("Scheduling all saved events")
     val events = EventDao.findAll()
     events.foreach(event => {
-      scheduler.schedule(event)
+      AccessTokenDao.findOneByID(id = event.userIdentifier) match {
+        case Some(accessToken) => {
+          scheduler.schedule(event, accessToken)
+        }
+        case None => {
+          LOG.warn("Missing access token for event id {} and user identifier {}", event.id, event.userIdentifier)
+        }
+      }
     })
   }
 
   def main(args: Array[String]) {
-    if (args.length == 2) {
-      val accessToken = new AccessTokenRequester().requestAccessToken(args(0), args(1))
-      println
-      println("Your access token is: " + accessToken.value + " " + accessToken.secret)
-      println
-      println("The command line parameters to use: " + args(0) + " " + args(1) + " " + accessToken.value + " " + accessToken.secret)
-      
-      System.exit(0)
+    if (args.length != 2) {
+      println("Usage <api key> <api secret>")
     }
 
-    
-    
-    val info = List(args(0), args(1), args(2), args(3))
+    val apiKey = new ApiKey(args(0), args(1))
 
     if (System.getProperty("environment") == "development") {
       System.setProperty("org.scalatra.environment", "development")
@@ -56,7 +57,7 @@ object JettyLauncher {
       System.setProperty("scalate.allowCaching", "false")
     }
 
-    val scheduler = JobScheduler(info)
+    val scheduler = JobScheduler(apiKey)
     scheduleAllSavedEvents(scheduler)
 
     val server = new Server(9000)
@@ -66,7 +67,7 @@ object JettyLauncher {
     static.setResourceBase(JettyLauncher.getClass.getClassLoader.getResource("static").toExternalForm)
 
     val root = new Context(server, "/", Context.SESSIONS)
-    root.addServlet(new ServletHolder(new RoutingServlet(info, scheduler)), "/*")
+    root.addServlet(new ServletHolder(new RoutingServlet(apiKey, scheduler)), "/*")
     server.start()
     server.join()
   }
