@@ -33,6 +33,24 @@
                 $("#devices-list").listview('refresh');
             });
         });
+
+        // turn on command
+        $("#devices").on("click", "a.on", function(event) {
+            console.log("In event handler for a.on");
+            event.preventDefault();
+            $.get('/command/on', { deviceId: $(this).attr('id') }, function(data) {
+                console.log("get done for on command");
+            });
+        });
+
+        // turn off command
+        $("#devices").on("click", "a.off", function(event) {
+            console.log("In event handler for a.off");
+            event.preventDefault();
+            $.get('/command/off', { deviceId: $(this).attr('id') }, function(data) {
+                console.log("get done for off command");
+            });
+        });
     });
 
 div(data-role="page")
@@ -43,7 +61,12 @@ div(data-role="page")
     div(id="devices" data-role="content")
         ul(id="devices-list" data-role="listview")
             - devices.foreach(device => {
-                li(id="device_#{device.id.toString}" data-role="list-divider") = device.name
+                li(id="device_#{device.id.toString}" data-role="list-divider")
+                    span.device-name
+                        = device.name
+                    span.command-buttons(data-role="controlgroup" data-type="horizontal")
+                        a(id="#{device.id.toString}" href="#" class="on" data-role="button") On
+                        a(id="#{device.id.toString}" href="#" class="off" data-role="button") Off
                 - deviceEvents(device).foreach(event => {
                     li(id="li_#{event.id.toString}" class="event" data-icon="minus")
                         a(id="#{event.id.toString}" href="#" class="delete")

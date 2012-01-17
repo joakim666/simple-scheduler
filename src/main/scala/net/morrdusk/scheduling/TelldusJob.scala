@@ -3,6 +3,8 @@ package net.morrdusk.scheduling
 import org.quartz.{JobExecutionContext, Job}
 import org.slf4j.LoggerFactory
 import net.morrdusk.tellduslive.TelldusLive
+import net.morrdusk.ApiKey
+import net.morrdusk.model.AccessToken
 
 class TelldusJob extends Job with TelldusLive {
   override val LOG = LoggerFactory.getLogger(getClass)
@@ -11,15 +13,16 @@ class TelldusJob extends Job with TelldusLive {
     val data = context.getJobDetail.getJobDataMap
     val action = data.getString(TelldusJob.ACTION)
     val deviceId = data.getString(TelldusJob.DEVICE_ID)
-    val info: List[String] = data.get(TelldusJob.API_KEY).asInstanceOf[List[String]]
+    val apiKey = data.get(TelldusJob.API_KEY).asInstanceOf[ApiKey]
+    val accessToken = data.get(TelldusJob.ACCESS_TOKEN).asInstanceOf[AccessToken]
 
-    LOG.info("in execute with action={} and deviceId={}", action, deviceId)
+    LOG.debug("in execute with action={} and deviceId={}", action, deviceId)
 
     if (action.equals("on")) {
-      turnOn(info, deviceId.toInt)
+      turnOn(apiKey, accessToken, deviceId.toInt)
     }
     else if (action.equals("off")) {
-      turnOff(info, deviceId.toInt)
+      turnOff(apiKey, accessToken, deviceId.toInt)
     }
     else {
       LOG.error("Unknown action {} for deviceId {}", action, deviceId)

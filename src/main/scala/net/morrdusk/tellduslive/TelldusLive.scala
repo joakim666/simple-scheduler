@@ -13,15 +13,15 @@ import net.morrdusk.model.AccessToken
 trait TelldusLive {
   val LOG = LoggerFactory.getLogger(getClass)
 
-  def turnOn(info: List[String], id: Int): Boolean = {
-    makeRequest(info, id, 1)
+  def turnOn(apiKey: ApiKey, accessToken: AccessToken, id: Int): Boolean = {
+    makeRequest(apiKey, accessToken, id, 1)
   }
-  def turnOff(info: List[String], id: Int): Boolean = {
-    makeRequest(info, id, 2)
+  def turnOff(apiKey: ApiKey, accessToken: AccessToken, id: Int): Boolean = {
+    makeRequest(apiKey, accessToken, id, 2)
   }
 
   def listDevices(apiKey: ApiKey, accessToken: AccessToken): List[Device] = {
-    LOG.info("listDevices: {} {}", apiKey, accessToken)
+    LOG.debug("listDevices: {} {}", apiKey, accessToken)
 
     makeDeviceRequest(apiKey, accessToken, "list")
   }
@@ -51,22 +51,21 @@ trait TelldusLive {
   private
 
   def makeDeviceRequest(apiKey: ApiKey, accessToken: AccessToken, command: String): List[Device] = {
-    LOG.info("makeDeviceRequest")
     val consumer = Consumer(apiKey.key, apiKey.secret)
     val access_token = Token(accessToken.value, accessToken.secret)
     val http = new Http
 
     val url = (:/("api.telldus.com") / "json").secure
     val res = http(url / "devices" / command <@ (consumer, access_token) as_str)
-    LOG.info("res: {}", res)
+    LOG.debug("res: {}", res)
     val deviceList = parse[DeviceList](res)
-    LOG.info("parsed devices: {}", deviceList)
+    LOG.debug("parsed devices: {}", deviceList)
     deviceList.device
   }
 
-  def makeRequest(info: List[String], id: Int, method: Int): Boolean = {
-    val consumer = Consumer(info(0), info(1))
-    val access_token = Token(info(2), info(3))
+  def makeRequest(apiKey: ApiKey, accessToken: AccessToken, id: Int, method: Int): Boolean = {
+    val consumer = Consumer(apiKey.key, apiKey.secret)
+    val access_token = Token(accessToken.value, accessToken.secret)
     val http = new Http
 
     val url = (:/("api.telldus.com") / "xml").secure

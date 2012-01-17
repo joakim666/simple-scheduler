@@ -8,8 +8,17 @@ class DeviceModel extends TelldusLive {
 }
 
 object DeviceModel {
+
   def list(apiKey: ApiKey, accessToken: AccessToken): List[Device] = {
     val dev = new DeviceModel()
     dev.listDevices(apiKey, accessToken)
+  }
+  
+  def turnOn(key: ApiKey, token: AccessToken, deviceId: Int) {
+    new DeviceModel().turnOn(key, token, deviceId)
+  }
+
+  def turnOff(key: ApiKey, token: AccessToken, deviceId: Int) {
+    new DeviceModel().turnOff(key, token, deviceId)
   }
 }

@@ -1,6 +1,6 @@
 package net.morrdusk.web
 
-import controller.{EventController, DeviceController}
+import controller.{CommandController, EventController, DeviceController}
 import org.scalatra.{UrlSupport, ScalatraServlet}
 import org.scalatra.scalate.ScalateSupport
 import com.mongodb.casbah.commons.conversions.scala.RegisterJodaTimeConversionHelpers._
@@ -8,7 +8,6 @@ import net.morrdusk.scheduling.JobScheduler
 import org.fusesource.scalate.layout.DefaultLayoutStrategy
 import org.openid4java.consumer._
 import org.openid4java.discovery._
-import org.openid4java.message.ax._
 import org.openid4java.message._
 import collection.mutable.ConcurrentMap
 import scala.collection.JavaConversions._
@@ -33,12 +32,30 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
   before() {
     contentType = "text/html"
     templateEngine.layoutStrategy = new DefaultLayoutStrategy(templateEngine, "/layouts/default.jade")
+
+    val sessionCookieConfig = request.getServletContext.getSessionCookieConfig
+    sessionCookieConfig.setMaxAge(60*60*24*365) // one year in seconds
   }
 
   get("/") {
+    LOG.debug("root: {} {}", session.getId, sessionAuth.get(session.getId))
     sessionAuth.get(session.getId) match {
       case Some(user) => new DeviceController(templateEngine, apiKey, user).index()
       case None => templateEngine.layout("/index.jade")
+    }
+  }
+
+  get("/command/on") {
+    sessionAuth.get(session.getId) match {
+      case Some(user) => new CommandController(templateEngine, apiKey, user).on(params)
+      case None => halt(403)
+    }
+  }
+
+  get("/command/off") {
+    sessionAuth.get(session.getId) match {
+      case Some(user) => new CommandController(templateEngine, apiKey, user).off(params)
+      case None => halt(403)
     }
   }
 
@@ -85,7 +102,10 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
         authReq.addExtension(fetch)
         redirect(authReq.getDestinationUrl(true))
       }
-      case Some(user) => redirect("/")
+      case Some(user) => {
+        LOG.debug("Doing internal redirect")
+        servletContext.getRequestDispatcher("/").forward(request, response)
+      }
     }
   }
 
@@ -145,9 +165,7 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
     sessionAuth.get(session.getId) match {
       case Some(user) => {
         val requestToken = session.getAttribute("requestToken").asInstanceOf[Token]
-        LOG.debug("requestToken2: {}", requestToken)
         val accessToken = new AccessTokenRequester().getAccessToken(apiKey, requestToken)
-        LOG.debug("accessToken: {}", accessToken)
 
         val token = AccessToken(identifier = user.identity,
                                 value = accessToken.value,

@@ -1,15 +1,14 @@
 package net.morrdusk
 
 import model.{AccessTokenDao, EventDao}
-import org.mortbay.jetty.Server
 import request.AccessTokenRequester
 import scheduling.JobScheduler
 import web.RoutingServlet
 
-import org.mortbay.jetty.servlet.{Context, ServletHolder}
-import org.mortbay.jetty.handler.ResourceHandler
 import org.slf4j.LoggerFactory
-import com.mongodb.casbah.commons.MongoDBObject
+import org.eclipse.jetty.servlet.{ServletContextHandler, ServletHolder}
+import org.eclipse.jetty.server.handler.{ContextHandlerCollection, ResourceHandler}
+import org.eclipse.jetty.server.{Handler, Server}
 
 class ApiKey(val key: String, val secret: String)
 
@@ -42,6 +41,7 @@ object JettyLauncher {
     val apiKey = new ApiKey(args(0), args(1))
 
     if (System.getProperty("environment") == "development") {
+      LOG.info("Starting in development mode")
       System.setProperty("org.scalatra.environment", "development")
 
       /**
@@ -52,6 +52,7 @@ object JettyLauncher {
       System.setProperty("scalate.allowCaching", "true")
     }
     else {
+      LOG.info("Starting in production mode")
       System.setProperty("org.scalatra.environment", "production")
       System.setProperty("scalate.allowReload", "false")
       System.setProperty("scalate.allowCaching", "false")
@@ -62,12 +63,19 @@ object JettyLauncher {
 
     val server = new Server(9000)
 
-    val static = new Context(server, "/static", Context.NO_SESSIONS)
-    static.setHandler(new ResourceHandler)
-    static.setResourceBase(JettyLauncher.getClass.getClassLoader.getResource("static").toExternalForm)
+    val staticContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS)
+    staticContext.setContextPath("/static")
+    staticContext.setHandler(new ResourceHandler)
+    staticContext.setResourceBase(JettyLauncher.getClass.getClassLoader.getResource("static").toExternalForm)
 
-    val root = new Context(server, "/", Context.SESSIONS)
-    root.addServlet(new ServletHolder(new RoutingServlet(apiKey, scheduler)), "/*")
+    val rootContext = new ServletContextHandler(ServletContextHandler.SESSIONS)
+    rootContext.setContextPath("/")
+    rootContext.addServlet(new ServletHolder(new RoutingServlet(apiKey, scheduler)), "/*")
+
+    val contexts = new ContextHandlerCollection()
+    contexts.setHandlers(Array[Handler](staticContext, rootContext))
+    server.setHandler(contexts)
+
     server.start()
     server.join()
   }

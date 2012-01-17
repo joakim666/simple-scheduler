@@ -67,3 +67,25 @@ li.event .ui-icon-delete {
 .ui-btn-down-f {
   font-family: Helvetica, Arial, sans-serif;
 }
+.ui-li-divider {
+    height: 18px;
+}
+.ui-controlgroup-horizontal {
+    right: 1px;
+    position: absolute;
+    top: 0;
+    margin-top: 1px;
+}
+span.device-name {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    margin-top: -9px;
+}
+span.command-buttons .ui-btn-inner {
+    padding: .3em 15px;
+}
+/* too avoid safari zoom for select boxes */
+.ui-select .ui-btn select{
+    font-size: 50px;
+}
