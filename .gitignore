@@ -8,3 +8,4 @@ project/plugins/target
 *.iml
 project/plugins/lib_managed
 project/project.iml
+src/main/resources/rebel.xml
