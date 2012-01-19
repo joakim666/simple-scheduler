@@ -60,6 +60,8 @@ Once started the web interface is available at **http://localhost:9000**
 
 ### Screenshot
 
+Screenshot to be updated. The below is slightly old.
+
 ![Screenshot of iPad using the schedular](https://raw.github.com/joakim666/simple-scheduler/master/screenshots/iPad_screenshot.jpg)
 
 
