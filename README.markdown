@@ -7,7 +7,7 @@ This is a scheduler for the [Telldus Live!](http://live.telldus.com/) API writte
 using the internet. **Simple-Scheduler** is a scheduler with a web interface that uses the Telldus Live! to turn on and off devices
 at given times.
 
-Simple-Scheduler has a built in web server with an interface designed for mobile devices. This makes it easy to start (just *java -jar ...*)
+Simple-Scheduler has a built in web server with an interface designed for mobile devices. This makes it easy to start (just **java -jar ...**)
 and simple to use from your phone or tablet.
 
 Scroll down for a screenshot.
@@ -55,7 +55,7 @@ Start the scheduler with the key and secret retrieved in step 2 above as the par
 
 ### That's it!
 
-The web interface is available at [http://localhost:9000]
+Once started the web interface is available at **http://localhost:9000**
 
 
 ### Screenshot
