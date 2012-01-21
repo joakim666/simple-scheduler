@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
     "org.scalatra" %% "scalatra" % "2.0.1",
     "org.scalatra" %% "scalatra-scalate" % "2.0.1",
     "org.eclipse.jetty" % "jetty-servlet" % "8.1.0.RC4",
-    "com.novus" %% "salat-core" % "0.0.8-SNAPSHOT",
+    "com.novus" %% "salat-core" % "0.0.7",
     "com.mongodb.casbah" % "casbah_2.9.0-1" % "2.1.5.0",
     "com.codahale" %% "jerkson" % "0.5.0",
     "org.quartz-scheduler" % "quartz" % "2.1.1",
