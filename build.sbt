@@ -50,4 +50,12 @@ seq(releaseSettings: _*)
 
 publishTo := Some(Resolver.file("file",  new File( "/Users/joakim/releases" )) )
 
+// as I can't figure out how to change the release process to call assembly
+// instead of publish. Override publish and make it depend on assembly as a workaround
+fooTask := {
+    "foo"
+}
+
+fooTask <<= fooTask.dependsOn(assembly)
 // end: for sbt-release plugin
+
