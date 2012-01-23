@@ -1,9 +1,5 @@
 import AssemblyKeys._
 
-import sbtrelease._
-
-import sbtrelease.Release._
-
 name := "simple-scheduler"
 
 version := "0.1"
@@ -44,18 +40,4 @@ seq(assemblySettings: _*)
 
 jarName in assembly := "simple-scheduler.jar"
 // end: for the sbt-assembly plugin
-
-// begin: for sbt-release plugin https://github.com/gseitz/sbt-release
-seq(releaseSettings: _*)
-
-publishTo := Some(Resolver.file("file",  new File( "/Users/joakim/releases" )) )
-
-// as I can't figure out how to change the release process to call assembly
-// instead of publish. Override publish and make it depend on assembly as a workaround
-fooTask := {
-    "foo"
-}
-
-fooTask <<= fooTask.dependsOn(assembly)
-// end: for sbt-release plugin
 
