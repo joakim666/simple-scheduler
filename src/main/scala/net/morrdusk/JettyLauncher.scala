@@ -38,7 +38,7 @@ object JettyLauncher {
       println("Usage <api key> <api secret> [http address]")
     }
     val httpAddress = if (args.length == 3) {
-      Some(args(3))
+      Some(args(2))
     }
     else {
       None
