@@ -21,7 +21,7 @@ import net.morrdusk.model.{AccessTokenDao, AccessToken}
 
 case class AuthUser(identity: String, accessToken: Option[AccessToken], email: String, fullName: String)
 
-class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraServlet with UrlSupport with ScalateSupport {
+class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler, httpAddress: Option[String]) extends ScalatraServlet with UrlSupport with ScalateSupport {
   val LOG = LoggerFactory.getLogger(getClass)
 
   protected def contextPath = request.getContextPath
@@ -95,7 +95,7 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
         val discoveries = manager.discover("http://login.telldus.com")
         val discovered = manager.associate(discoveries)
         session.setAttribute("discovered", discovered)
-        val authReq = manager.authenticate(discovered, makeUrl("/authenticated"))
+        val authReq = manager.authenticate(discovered, makeUrl(httpAddress, "/authenticated"))
         val fetch = SRegRequest.createFetchRequest()
         fetch.addAttribute("email",true)
         fetch.addAttribute("fullname", true)
@@ -150,7 +150,7 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
     LOG.debug("authorize")
     sessionAuth.get(session.getId) match {
       case Some(user) => {
-        val (requestToken, authorizeUrl) = new AccessTokenRequester().makeAuthorizeUrl(apiKey, makeUrl("/authorized"))
+        val (requestToken, authorizeUrl) = new AccessTokenRequester().makeAuthorizeUrl(apiKey, makeUrl(httpAddress, "/authorized"))
         LOG.debug("authorizeUrl={}", authorizeUrl)
         LOG.debug("requestToken1: {}", requestToken)
         session.setAttribute("requestToken", requestToken)
@@ -180,8 +180,13 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler) extends ScalatraSe
     }
   }
 
-  def makeUrl(path: String): String = {
-    request.getScheme + "://" + request.getServerName + ":" + request.getServerPort + path
+  def makeUrl(httpAddress: Option[String], path: String): String = {
+    httpAddress match {
+      case Some(str) =>
+        httpAddress + path
+      case None =>
+        request.getScheme + "://" + request.getServerName + ":" + request.getServerPort + path
+    }
   }
 
 }

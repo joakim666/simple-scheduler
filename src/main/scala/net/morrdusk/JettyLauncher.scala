@@ -34,8 +34,14 @@ object JettyLauncher {
   }
 
   def main(args: Array[String]) {
-    if (args.length != 2) {
-      println("Usage <api key> <api secret>")
+    if (args.length < 2) {
+      println("Usage <api key> <api secret> [http address]")
+    }
+    val httpAddress = if (args.length == 3) {
+      Some(args(3))
+    }
+    else {
+      None
     }
 
     val apiKey = new ApiKey(args(0), args(1))
@@ -70,7 +76,7 @@ object JettyLauncher {
 
     val rootContext = new ServletContextHandler(ServletContextHandler.SESSIONS)
     rootContext.setContextPath("/")
-    rootContext.addServlet(new ServletHolder(new RoutingServlet(apiKey, scheduler)), "/*")
+    rootContext.addServlet(new ServletHolder(new RoutingServlet(apiKey, scheduler, httpAddress)), "/*")
 
     val contexts = new ContextHandlerCollection()
     contexts.setHandlers(Array[Handler](staticContext, rootContext))
