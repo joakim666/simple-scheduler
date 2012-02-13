@@ -183,7 +183,7 @@ class RoutingServlet(apiKey: ApiKey, scheduler: JobScheduler, httpAddress: Optio
   def makeUrl(httpAddress: Option[String], path: String): String = {
     httpAddress match {
       case Some(str) =>
-        httpAddress + path
+        str + path
       case None =>
         request.getScheme + "://" + request.getServerName + ":" + request.getServerPort + path
     }
